@@ -1,0 +1,8 @@
+dotnet new -h
+dotnet sln -h
+dotnet add reference
+
+dotnet tool install --global dotnet-ef --version 3.1.0
+https://stackoverflow.com/questions/56862089/cannot-find-command-dotnet-ef
+
+dotnet-ef migrations add InitialCreate -p Persistence/ -s API/
