@@ -10,6 +10,8 @@ interface IProps
 const DateInput: React.FC<IProps> = ({
   input,
   width,
+  date = false,
+  time = false,
   placeholder,
   meta: { touched, error },
   ...rest
@@ -19,6 +21,10 @@ const DateInput: React.FC<IProps> = ({
       <DateTimePicker
         placeholder={placeholder}
         value={input.value || null}
+        onBlur={input.onBlur}
+        onKeyDown={e => e.preventDefault()}
+        date={date}
+        time={time}
         onChange={input.onChange}
         {...rest}
       />
