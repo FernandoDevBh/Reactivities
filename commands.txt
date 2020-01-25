@@ -1,3 +1,16 @@
+--VSCode Extensisons
+code --install-extension alexcvzz.vscode-sqlite
+code --install-extension CoenraadS.bracket-pair-colorizer
+code --install-extension CoenraadS.bracket-pair-colorizer-2
+code --install-extension dsznajder.es7-react-js-snippets
+code --install-extension esbenp.prettier-vscode
+code --install-extension formulahendry.auto-close-tag
+code --install-extension formulahendry.auto-rename-tag
+code --install-extension jchannon.csharpextensions
+code --install-extension jmrog.vscode-nuget-package-manager
+code --install-extension ms-vscode.csharp
+code --install-extension PKief.material-icon-theme
+
 dotnet new -h
 dotnet sln -h
 dotnet add reference
