@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
-import ActivityStore from "../../../app/stores/activityStore";
 import { RouteComponentProps } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import AcitivityDetailedHeader from "./AcitivityDetailedHeader";
 import AcitivityDetailedInfo from "./AcitivityDetailedInfo";
 import AcitivityDetailedChat from "./AcitivityDetailedChat";
 import AcitivityDetailedSideBar from "./AcitivityDetailedSideBar";
+import RootStore from "../../../app/stores/rootStore";
 
 interface DetailParams {
   id: string;
@@ -17,11 +17,13 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history
 }) => {
+  const { activityStore } = useContext(RootStore);
   const {
     activity: selectedActivity,
     loadActivity,
     loadingInitial
-  } = useContext(ActivityStore);
+  } = activityStore;
+
   const activity = selectedActivity!;
 
   useEffect(() => {
@@ -32,8 +34,8 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
     return <LoadingComponent content="Loading Activity..." />;
   }
 
-  if(!activity){
-    return <h1>Not found</h1>
+  if (!activity) {
+    return <h1>Not found</h1>;
   }
 
   return (
