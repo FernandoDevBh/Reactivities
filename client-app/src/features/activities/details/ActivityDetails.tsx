@@ -46,7 +46,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
         <AcitivityDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <AcitivityDetailedSideBar />
+        <AcitivityDetailedSideBar attendees={activity.attendees} />
       </Grid.Column>
     </Grid>
   );

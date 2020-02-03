@@ -38,9 +38,9 @@ namespace Application.Activities
                 }
 
                 var user = _context.Users.SingleOrDefault(u => u.UserName == _userAccessor.GetCurrentUserName());
-
+                
                 var attendance = await _context.UserActivities.SingleOrDefaultAsync(
-                    ua => activity.Id == activity.Id && ua.AppUserId == user.Id
+                    ua => ua.ActivityId == activity.Id && ua.AppUserId == user.Id
                 );
 
                 if (attendance == null)
