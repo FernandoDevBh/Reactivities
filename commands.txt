@@ -23,3 +23,7 @@ dotnet-ef database drop -p Persistence/ -s API/
 
 
 npx create-react-app client-app --use-npm --typescript
+
+dotnet user-secrets init
+dotnet user-secrets list
+dotnet user-secrets set <key> <value>

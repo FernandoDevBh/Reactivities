@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Application.User
 {
     public class Login
     {
-        public class Query : IRequest<User> 
+        public class Query : IRequest<User>
         {
             public string Email { get; set; }
             public string Password { get; set; }
@@ -44,12 +45,12 @@ namespace Application.User
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
-                if(user == null)
-                    throw new RestException(HttpStatusCode.Unauthorized); 
+                if (user == null)
+                    throw new RestException(HttpStatusCode.Unauthorized);
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     // TODO: generate TOKEN
                     return new User
@@ -57,11 +58,11 @@ namespace Application.User
                         DisplayName = user.DisplayName,
                         Token = _jwtGenerator.CreateToken(user),
                         Username = user.UserName,
-                        Image = null
+                        Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
                     };
                 }
 
-                throw new RestException(HttpStatusCode.Unauthorized); 
+                throw new RestException(HttpStatusCode.Unauthorized);
             }
         }
     }
