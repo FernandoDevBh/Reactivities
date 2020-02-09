@@ -32,7 +32,7 @@ export default class ProfileStore {
         () => (this.profile = profile)
       );
     } catch (error) {
-      toast.error('Problems setting photo as main')
+      toast.error("Problems setting photo as main");
       console.log(error);
     } finally {
       runInAction(
@@ -86,15 +86,32 @@ export default class ProfileStore {
   @action deletePhoto = async (photo: IPhoto) => {
     this.loading = true;
     try {
-        await agent.Profiles.deletePhoto(photo.id);
-        runInAction(() => {
-          this.profile!.photos = this.profile!.photos.filter(p => p.id !== photo.id);
-        })
+      await agent.Profiles.deletePhoto(photo.id);
+      runInAction(() => {
+        this.profile!.photos = this.profile!.photos.filter(
+          p => p.id !== photo.id
+        );
+      });
     } catch (error) {
-       toast.error('Problems on deleting photo.')
+      toast.error("Problems on deleting photo.");
+    } finally {
+      runInAction(() => (this.loading = false));
     }
-    finally{
-      runInAction(() => this.loading = false)
+  };
+
+  @action updateProfile = async (profile: Partial<IProfile>) => {
+    try {
+      await agent.Profiles.updateProfile(profile);
+      runInAction(() => {
+        if (
+          profile.displayName !== this.rootStore.userStore.user!.displayName
+        ) {
+          this.rootStore.userStore.user!.displayName = profile.displayName!;
+          this.profile = { ...this.profile!, ...profile };
+        }
+      });
+    } catch (error) {
+      toast.error('Error updating profile.')
     }
-  }
+  };
 }
