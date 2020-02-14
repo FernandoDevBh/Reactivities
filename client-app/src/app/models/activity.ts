@@ -39,6 +39,7 @@ export interface IAttendee {
     displayName: string;
     image: string;
     isHost: Boolean;
+    following?: boolean;
 }
 
 export interface IComment {

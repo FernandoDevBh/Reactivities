@@ -1,5 +1,5 @@
 import { RootStore } from "./rootStore";
-import { observable, action, runInAction, computed } from "mobx";
+import { observable, action, runInAction, computed, reaction } from "mobx";
 import { IProfile, IPhoto } from "../models/profile";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
@@ -9,12 +9,26 @@ export default class ProfileStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+
+    reaction(
+      () => this.activeTab,
+      activeTab => {        
+        if (activeTab === 3 || activeTab === 4) {          
+          const predicate = activeTab === 3 ? "followers" : "following";          
+          this.loadFollowings(predicate);
+        } else {
+          this.followings = [];
+        }
+      }
+    );
   }
 
   @observable profile: IProfile | null = null;
   @observable loadingProfile = true;
   @observable uploadingPhoto = false;
   @observable loading = false;
+  @observable followings: IProfile[] = [];
+  @observable activeTab: number = 0;
 
   @computed get isCurrentUser() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -23,22 +37,24 @@ export default class ProfileStore {
     return false;
   }
 
+  @action setActiveTab = (activeIndex: number) => {
+    this.activeTab = activeIndex;
+  };
+
   @action loadProfile = async (username: string) => {
     this.loadingProfile = true;
     try {
       const profile = await agent.Profiles.get(username);
-      runInAction(
-        "Setting profile to Observable Profile",
-        () => (this.profile = profile)
-      );
+      runInAction("Setting profile to Observable Profile", () => {
+        this.profile = profile;
+      });
     } catch (error) {
       toast.error("Problems setting photo as main");
       console.log(error);
     } finally {
-      runInAction(
-        "Setting loading to false",
-        () => (this.loadingProfile = false)
-      );
+      runInAction(() => {
+        this.loadingProfile = false;
+      });
     }
   };
 
@@ -111,7 +127,56 @@ export default class ProfileStore {
         }
       });
     } catch (error) {
-      toast.error('Error updating profile.')
+      toast.error("Error updating profile.");
+    }
+  };
+
+  @action follow = async (username: string) => {
+    this.loading = true;
+    try {
+      await agent.Profiles.follow(username);
+      runInAction(() => {
+        this.profile!.following = true;
+        this.profile!.followingCount++;
+      });
+    } catch (error) {
+      toast.error("Problem following user");
+    } finally {
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  @action unfollow = async (username: string) => {
+    this.loading = true;
+    try {
+      await agent.Profiles.unfollow(username);
+      runInAction(() => {
+        this.profile!.following = false;
+        this.profile!.followingCount--;
+      });
+    } catch (error) {
+      toast.error("Problem unfollowing user");
+    } finally {
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  @action loadFollowings = async (predicate: string) => {
+    this.loading = true;
+    try {
+      const profiles = await agent.Profiles.listFollowings(
+        this.profile!.username,
+        predicate
+      );
+      runInAction(() => {
+        this.followings = profiles;
+      });
+    } catch (error) {
+      toast.error("Problem loading followings");
+    } finally {
+      runInAction(() => {
+        this.loading = false;
+      });
     }
   };
 }

@@ -19,22 +19,37 @@ const ProfilePage: React.FC<IProps> = ({
   }
 }) => {
   const {
-    profileStore: { loadingProfile, loadProfile, profile }
+    profileStore: {
+      loadingProfile,
+      loadProfile,
+      profile,
+      follow,
+      unfollow,
+      loading,
+      isCurrentUser,
+      setActiveTab
+    }
   } = useContext(rootStore);
 
   useEffect(() => {
-      loadProfile(username)
+    loadProfile(username);
   }, [loadProfile, username]);
 
-  if(loadingProfile){
-      return <LoadingComponent content="Loading Profile..." />
+  if (loadingProfile) {
+    return <LoadingComponent content="Loading Profile..." />;
   }
 
   return (
     <Grid>
       <Grid.Column width={16}>
-        <ProfileHeader profile={profile!} />
-        <ProfileContent />
+        <ProfileHeader
+          profile={profile!}
+          follow={follow}
+          unfollow={unfollow}
+          loading={loading}
+          isCurrentUser={isCurrentUser}
+        />
+        <ProfileContent setActiveTab={setActiveTab}/>
       </Grid.Column>
     </Grid>
   );
