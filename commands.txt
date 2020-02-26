@@ -27,3 +27,6 @@ npx create-react-app client-app --use-npm --typescript
 dotnet user-secrets init
 dotnet user-secrets list
 dotnet user-secrets set <key> <value>
+
+https://help.cloud66.com/maestro/how-to-guides/databases/shells/uninstall-mysql.html
+https://medium.com/@leandroembu/como-instalar-o-mysql-no-ubuntu-18-04-2ef208a728fa

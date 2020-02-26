@@ -6,6 +6,7 @@ import LogingForm from "../user/LogingForm";
 import RegisterForm from "../user/RegisterForm";
 
 const HomePage = () => {
+  const token = window.localStorage.getItem('jwt');
   const {
     userStore: { isLoggedIn, user },
     modalStore: { openModel }
@@ -22,7 +23,7 @@ const HomePage = () => {
           />
           Reactivities
         </Header>
-        {isLoggedIn && user ? (
+        {isLoggedIn && user && token ? (
           <Fragment>
             <Header
               as="h2"
