@@ -15,7 +15,7 @@ namespace API
         {
             var host = CreateHostBuilder(args).Build();
 
-            using(var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 try
@@ -38,6 +38,7 @@ namespace API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseKestrel(x => x.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
                 });
     }

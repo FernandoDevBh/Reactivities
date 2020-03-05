@@ -30,3 +30,7 @@ dotnet user-secrets set <key> <value>
 
 https://help.cloud66.com/maestro/how-to-guides/databases/shells/uninstall-mysql.html
 https://medium.com/@leandroembu/como-instalar-o-mysql-no-ubuntu-18-04-2ef208a728fa
+https://unix.stackexchange.com/questions/225401/how-to-see-full-log-from-systemctl-status-service
+
+
+dotnet publish -c Release -o publish --self-contained false Reactivities.sln

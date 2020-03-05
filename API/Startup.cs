@@ -143,7 +143,19 @@ namespace API
                 //app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opt => opt.NoReferrer());
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            app.UseXfo(opt => opt.Deny());
+            app.UseCsp(opt => 
+                opt.BlockAllMixedContent()
+                .StyleSources(x => x.Self().CustomSources("http://fonts.googleapis.com", "sha256-4JqrX7rrNLxYOU9KFPHnQGL6TQuE9qWtUPge+ZpwA9o=", "sha256-lHYoLu39OFZ97WJXJ4b7MiLIoMS9oOPyI42K+XBY0QM="))
+                .FontSources(f => f.Self().CustomSources("http://fonts.gstatic.com", "data:"))
+                .FormActions(f => f.Self())
+                .FrameAncestors(a => a.Self())
+                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:"))
+                .ScriptSources(s => s.Self().CustomSources("sha256-zTmokOtDNMlBIULqs//ZgFtzokerG72Q30ccMjdGbSA="))
+            );
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

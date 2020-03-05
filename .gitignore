@@ -5,3 +5,4 @@ wwwroot
 .DS_Store
 appsettings.json
 *.db
+publish
